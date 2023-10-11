@@ -1,5 +1,10 @@
-# saltedgames_front-end
+# SaltedGames Front-end
 
+Welkom bij de front-end applicatie voor mijn project genaamd SaltedGames
+## Belangrijkste Kenmerken To Date.
+
+- **Steam Login**: Log in met je Steam-account en haal je games op.
+- **Games Lijst**: Bekijk een lijst van je games, gesorteerd op speeltijd.
 ## Project setup
 ```
 npm install
