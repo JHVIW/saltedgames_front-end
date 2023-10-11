@@ -1,26 +1,38 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <HeaderComponent />
+    <SteamIdInputComponent @gamesFetched="updateGames" />
+    <MessageComponent :message="message" />
+    <GamesListComponent :games="games" />
+
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import HeaderComponent from './components/HeaderComponent.vue';
+import SteamIdInputComponent from './components/SteamIdInputComponent.vue';
+import MessageComponent from './components/MessageComponent.vue';
+import GamesListComponent from './components/GamesListComponent.vue';
 
 export default {
-  name: 'App',
   components: {
-    HelloWorld
+    HeaderComponent,
+    SteamIdInputComponent,
+    MessageComponent,
+    GamesListComponent
+  },
+  data() {
+    return {
+      games: [],
+      message: ""
+    };
+  },
+  methods: {
+    updateGames(result) {
+      this.games = result.games;
+      this.message = result.message;
+    }
   }
-}
-</script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+};
+</script>
