@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="header-container">
-      <h1 class="header">SaltedGames</h1>
+      <router-link to="/home" style="text-decoration: none;">
+        <h1 class="header">SaltedGames</h1>
+      </router-link>
       <form action="https://steamcommunity.com/openid/login" method="post" class="steam-login-form">
         <input type="hidden" name="openid.identity" value="http://specs.openid.net/auth/2.0/identifier_select" />
         <input type="hidden" name="openid.claimed_id" value="http://specs.openid.net/auth/2.0/identifier_select" />
@@ -28,12 +30,17 @@
   margin: 0;
 }
 
+
 .header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
   border-bottom: 2px solid #007BFF;
+}
+
+.header-container router-link {
+  text-decoration: none;
 }
 
 .steam-login-form {

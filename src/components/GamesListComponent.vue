@@ -1,11 +1,11 @@
 <template>
   <div v-if="games.length > 0" class="center-container">
     <div class="center-button">
-    <button @click="sortGamesByPlaytime(games)">Sort by Playtime</button>
-  </div>
+      <button @click="sortGamesByPlaytime(games)">Sort by Playtime</button>
+    </div>
     <h2>Games:</h2>
     <ul class="game-list">
-      <li v-for="game in games" :key="game.steamAppID" class="game-item">
+      <li v-for="game in filteredGames" :key="game.steamAppID" class="game-item">
         <div class="game-info">
           <div class="game-name">{{ game.gameName }}</div>
           <div class="playtime">{{ convertMinutesToHours(game.playtime) }} hours</div>
@@ -14,7 +14,7 @@
     </ul>
   </div>
 </template>
-  
+
 <script>
 import { convertMinutesToHours, sortGamesByPlaytime } from '@/services/GetGames';
 
@@ -22,7 +22,13 @@ export default {
   props: {
     games: {
       type: Array,
-      required: true
+      required: true,
+      default: () => []
+    }
+  },
+  computed: {
+    filteredGames() {
+      return this.games.filter(game => game.gameName && game.gameName.trim() !== '');
     }
   },
   methods: {
@@ -31,7 +37,7 @@ export default {
   }
 };
 </script>
-  
+
 <style scoped>
 .center-container {
   text-align: center;
@@ -42,6 +48,7 @@ export default {
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   animation: fadeIn 1s ease-in-out;
+  font-family: 'Arial', sans-serif; /* Use your preferred font */
 }
 
 .center-button {
@@ -67,7 +74,7 @@ h2 {
   margin: 0.5rem 0;
   background-color: #fff;
   border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease-in-out;
 }
 
@@ -81,13 +88,13 @@ h2 {
 }
 
 .game-name {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: bold;
   color: #333;
 }
 
 .playtime {
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: #666;
 }
 
@@ -116,5 +123,3 @@ button:hover {
   }
 }
 </style>
-
-  
