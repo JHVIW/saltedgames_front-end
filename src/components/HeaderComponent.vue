@@ -1,9 +1,11 @@
 <template>
   <div>
-    <div class="header-container">
-      <router-link to="/home" style="text-decoration: none;">
-        <h1 class="header">SaltedGames</h1>
-      </router-link>
+    <nav class="navbar">
+      <div class="navbar-logo">
+        <h1 class="header">
+          <router-link to="/home" style="text-decoration: none;" class="salted-games-link">SaltedGames</router-link>
+        </h1>
+      </div>
       <form action="https://steamcommunity.com/openid/login" method="post" class="steam-login-form">
         <input type="hidden" name="openid.identity" value="http://specs.openid.net/auth/2.0/identifier_select" />
         <input type="hidden" name="openid.claimed_id" value="http://specs.openid.net/auth/2.0/identifier_select" />
@@ -12,9 +14,25 @@
         <input type="hidden" name="openid.realm" value="http://localhost:8080/" />
         <input type="hidden" name="openid.return_to" value="http://localhost:8080/" />
         <button type="submit" class="steam-login-btn">
-          <img src="../assets/login_logo.png" alt="Login" />
+          <img src="../assets/logo/login_logo.png" alt="Login" />
         </button>
       </form>
+      <div class="navbar-links">
+        <button class="hamburger-btn" @click="toggleMenu">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </button>
+      </div>
+    </nav>
+    <div v-if="isMenuOpen" class="menu">
+      <router-link to="/home" style="text-decoration: none;" @click="toggleMenu">
+        Home
+      </router-link>
+      <br>
+      <router-link to="/mijn-games" style="text-decoration: none;" @click="toggleMenu">
+        Mijn Games
+      </router-link>
     </div>
   </div>
 </template>
@@ -22,7 +40,7 @@
 <style scoped>
 .header {
   font-size: 2.5rem;
-  color: #007BFF;
+  background-color: #1C223D;
   text-transform: uppercase;
   letter-spacing: 2px;
   font-family: 'Helvetica Neue', sans-serif;
@@ -30,32 +48,112 @@
   margin: 0;
 }
 
+.salted-games-link {
+  color: white;
+}
 
-.header-container {
+.navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  border-bottom: 2px solid #007BFF;
+  border-bottom: 2px solid #1C223D;
+  background-color: #1C223D;
 }
 
-.header-container router-link {
+.navbar-logo {
+  flex: 1;
   text-decoration: none;
 }
 
-.steam-login-form {
-  text-align: center;
-  margin: 0;
+.navbar-links {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-links router-link {
+  text-decoration: none;
+  margin-right: 20px;
 }
 
 .steam-login-btn {
-  border: none;
+  outline: none;
+  display: block;
   cursor: pointer;
   background: none;
+  border: none;
+  padding: 0;
 }
 
-.steam-login-btn img {
-  height: 40px;
-  width: auto;
+.hamburger-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.bar {
+  width: 25px;
+  height: 3px;
+  background-color: white;
+  margin: 5px 0;
+}
+
+.menu {
+  background-color: white;
+  position: absolute;
+  top: 70px;
+  right: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.menu router-link {
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  margin: 10px 0;
 }
 </style>
+
+<script>
+export default {
+  data() {
+    return {
+      isMenuOpen: false,
+    };
+  },
+  methods: {
+    toggleMenu() {
+      this.isMenuOpen = !this.isMenuOpen;
+    },
+    closeMenuOnClickOutside(event) {
+      // Controleer of het menu open is
+      if (this.isMenuOpen) {
+        // Verkrijg een referentie naar het menu en de hamburger button
+        const menuElement = this.$el.querySelector('.menu');
+        const hamburgerButton = this.$el.querySelector('.hamburger-btn');
+
+        // Als de klik buiten het menu is en niet op de hamburger button, sluit het menu
+        if (!menuElement.contains(event.target) && !hamburgerButton.contains(event.target)) {
+          this.isMenuOpen = false;
+        }
+      }
+    }
+  },
+  mounted() {
+    document.addEventListener("click", this.closeMenuOnClickOutside);
+  },
+  beforeUnmount() {
+    document.removeEventListener("click", this.closeMenuOnClickOutside);
+  },
+  beforeRouteLeave(to, from, next) {
+    this.isMenuOpen = false;
+    next();
+  },
+  closeMenu() {
+    this.isMenuOpen = false;
+  },
+};
+</script>
+

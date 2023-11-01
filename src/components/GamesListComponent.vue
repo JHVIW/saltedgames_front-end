@@ -40,30 +40,39 @@ export default {
 
 <style scoped>
 .center-container {
+  margin: 0 auto;
   text-align: center;
-  margin: 2rem auto;
   max-width: 800px;
   padding: 2rem;
-  background-color: #f5f5f5;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 1s ease-in-out;
-  font-family: 'Arial', sans-serif; /* Use your preferred font */
+  background-color: #191d32;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  font-family: 'Arial', sans-serif;
+  color: white;
+}
+
+.center-button,
+h2,
+.game-list {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s forwards;
+  animation-delay: 0.3s;
 }
 
 .center-button {
-  text-align: center;
-  margin-top: 1rem;
+  animation-delay: 0.4s;
 }
 
 h2 {
   font-size: 2rem;
-  color: #333;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .game-list {
-  list-style: none;
-  padding: 0;
+  animation-delay: 0.6s;
 }
 
 .game-item {
@@ -72,14 +81,16 @@ h2 {
   align-items: center;
   padding: 1rem;
   margin: 0.5rem 0;
-  background-color: #fff;
+  background-color: #21263b;
   border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease-in-out;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  color: white;
 }
 
 .game-item:hover {
-  transform: scale(1.02);
+  transform: translateY(-5px);
+  box-shadow: 0 7px 20px rgba(0, 0, 0, 0.12);
 }
 
 .game-info {
@@ -90,36 +101,59 @@ h2 {
 .game-name {
   font-size: 1.4rem;
   font-weight: bold;
-  color: #333;
 }
 
 .playtime {
   font-size: 1.2rem;
-  color: #666;
+  color: white;
 }
 
 button {
   padding: 0.5rem 1rem;
   background-color: #007BFF;
-  color: #fff;
+  color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 25px;
   cursor: pointer;
   font-size: 1rem;
-  transition: background-color 0.3s ease-in-out;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 button:hover {
   background-color: #0056b3;
+  box-shadow: 0 7px 20px rgba(0, 0, 0, 0.2);
 }
 
-@keyframes fadeIn {
+@keyframes fadeInUp {
   0% {
     opacity: 0;
+    transform: translateY(30px);
   }
 
   100% {
     opacity: 1;
+    transform: translateY(0);
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.list-enter-active,
+.list-leave-active {
+  transition: transform 0.5s;
+}
+
+.list-enter,
+.list-leave-to {
+  transform: translateX(10px);
 }
 </style>
