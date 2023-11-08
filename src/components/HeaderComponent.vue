@@ -6,17 +6,9 @@
           <router-link to="/home" style="text-decoration: none;" class="salted-games-link">SaltedGames</router-link>
         </h1>
       </div>
-      <form action="https://steamcommunity.com/openid/login" method="post" class="steam-login-form">
-        <input type="hidden" name="openid.identity" value="http://specs.openid.net/auth/2.0/identifier_select" />
-        <input type="hidden" name="openid.claimed_id" value="http://specs.openid.net/auth/2.0/identifier_select" />
-        <input type="hidden" name="openid.ns" value="http://specs.openid.net/auth/2.0" />
-        <input type="hidden" name="openid.mode" value="checkid_setup" />
-        <input type="hidden" name="openid.realm" value="http://localhost:8080/" />
-        <input type="hidden" name="openid.return_to" value="http://localhost:8080/" />
-        <button type="submit" class="steam-login-btn">
+        <button @click="loginViaSteam" class="steam-login-btn">
           <img src="../assets/logo/login_logo.png" alt="Login" />
         </button>
-      </form>
       <div class="navbar-links">
         <button class="hamburger-btn" @click="toggleMenu">
           <div class="bar"></div>
@@ -139,8 +131,12 @@ export default {
           this.isMenuOpen = false;
         }
       }
-    }
+    },
+    loginViaSteam() {
+    window.location.href = 'http://localhost:5124/Auth/login'; // Dit moet de URL zijn van je .NET Core API login endpoint
   },
+  },
+  
   mounted() {
     document.addEventListener("click", this.closeMenuOnClickOutside);
   },
