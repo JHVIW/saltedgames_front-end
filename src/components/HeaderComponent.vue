@@ -25,6 +25,10 @@
       <router-link to="/mijn-games" style="text-decoration: none;" @click="toggleMenu">
         Mijn Games
       </router-link>
+      <br>
+      <router-link to="/all-games" style="text-decoration: none;" @click="toggleMenu">
+        Alle Games
+      </router-link>
     </div>
   </div>
 </template>
