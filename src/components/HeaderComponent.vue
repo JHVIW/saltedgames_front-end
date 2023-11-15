@@ -6,9 +6,17 @@
           <router-link to="/home" style="text-decoration: none;" class="salted-games-link">SaltedGames</router-link>
         </h1>
       </div>
+      
+      <!-- Conditional rendering based on isAuthenticated -->
+      <div v-if="!isAuthenticated">
         <button @click="loginViaSteam" class="steam-login-btn">
           <img src="../assets/logo/login_logo.png" alt="Login" />
         </button>
+      </div>
+      <div v-else class="welcome-text">
+        Welcome!
+      </div>
+
       <div class="navbar-links">
         <button class="hamburger-btn" @click="toggleMenu">
           <div class="bar"></div>
@@ -106,6 +114,18 @@
   text-decoration: none;
   margin: 10px 0;
 }
+
+.welcome-text {
+  font-size: 1.5rem;
+  color: white; 
+  background-color: #1C223D; 
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-family: 'Helvetica Neue', sans-serif;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 0.5rem 1rem; 
+  border-radius: 5px; 
+}
 </style>
 
 <script>
@@ -113,6 +133,7 @@ export default {
   data() {
     return {
       isMenuOpen: false,
+      isAuthenticated: false,
     };
   },
   methods: {
@@ -133,11 +154,27 @@ export default {
       }
     },
     loginViaSteam() {
-    window.location.href = 'http://localhost:5124/Auth/login'; // Dit moet de URL zijn van je .NET Core API login endpoint
+      window.location.href = 'http://localhost:5124/Auth/login'; // Dit moet de URL zijn van je .NET Core API login endpoint
+    },
+    async checkAuthStatus() {
+      try {
+        const response = await fetch('http://localhost:5124/Auth/status', {
+          method: 'GET',
+          credentials: 'include', // Include credentials (cookies) in the request
+        });
+        const data = await response.json();
+        this.isAuthenticated = data.isLoggedIn;
+      } catch (error) {
+        console.error('Error checking authentication status', error);
+        this.isAuthenticated = false;
+      }
+    },
   },
-  },
-  
+
+
+
   mounted() {
+    this.checkAuthStatus(); // Check authentication status when the component is mounted
     document.addEventListener("click", this.closeMenuOnClickOutside);
   },
   beforeUnmount() {

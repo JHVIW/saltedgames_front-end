@@ -1,39 +1,59 @@
 <template>
   <div class="home">
     <div class="input-container">
-      <input v-model="steam64Id" class="input-field" placeholder="Enter Steam64 ID" />
-      <button @click="getGames" class="action-button">Get Games</button>
       <br>
     </div>
-    <slot></slot>
+    <div v-if="isLoading" class="loading-spinner">
+      <div class="spinner"></div> 
+      Loading...
+    </div>
+    <div v-else>
+      <slot></slot>
+    </div>
   </div>
 </template>
-  
-  
+
 <script>
 import { getGames } from '@/services/GetGames.js';
+import store from '@/services/store.js'; 
 
 export default {
   data() {
     return {
-      steam64Id: ""
+      steam64Id: store.state.steamId || "", 
+      isLoading: false, 
     };
   },
   methods: {
     async getGames() {
-      const result = await getGames(this.steam64Id);
-      this.$emit('gamesFetched', result);
+      this.isLoading = true; 
+      try {
+        const result = await getGames(this.steam64Id);
+        this.$emit('gamesFetched', result);
+      } finally {
+        this.isLoading = false; 
+      }
     }
-  }
-
+  },
+  watch: {
+    'store.state.steamId'(newSteamId) {
+      this.steam64Id = newSteamId;
+      this.getGames(); 
+    },
+  },
+  created() {
+    this.getGames();
+  },
 };
 </script>
+
 <style scoped>
 .home {
   text-align: center;
   padding: 2rem;
   background-color: #191d32;
 }
+
 .input-container {
   display: flex;
   justify-content: center;
@@ -41,6 +61,28 @@ export default {
   flex-direction: column;
   margin-top: 2rem;
   background-color: #191d32;
+}
+
+.loading-spinner {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.5rem;
+  color: #759aab;
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top: 4px solid #759aab;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 2s linear infinite; 
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .input-field {
@@ -71,5 +113,3 @@ export default {
   background-color: #0056b3;
 }
 </style>
-
-  

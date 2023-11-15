@@ -7,7 +7,7 @@ async function storeGames(steam64Id) {
   
     try {
       const response = await fetch(
-        `http://localhost:5176/api/Game/StoreOwnedGames/${steam64Id}`,
+        `http://localhost:5176/api/Game/StoreOwnedGames?steam64Id=${steam64Id}`,
         {
           method: 'POST'
         }
@@ -43,7 +43,7 @@ async function storeGames(steam64Id) {
   
     try {
       const response = await fetch(
-        `http://localhost:5176/api/Game/GetOwnedGamesWithNames/${steam64Id}`
+        `http://localhost:5176/api/Game/GetOwnedGamesWithNames?steam64Id=${steam64Id}`
       );
   
       if (response.ok) {
