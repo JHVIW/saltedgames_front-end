@@ -3,7 +3,7 @@
     <div class="hero">
       <h1 class="title">SaltedGames</h1>
       <p class="subtitle">Ontdek en deel je favoriete games</p>
-      <router-link to="/mijn-games" class="explore-button">Verken Spellen</router-link>
+      <router-link to="/mijn-games" class="explore-button">Mijn Spellen</router-link>
     </div>
     <div class="features">
       <div class="feature">
@@ -102,6 +102,7 @@ body, html {
   transition: transform 0.3s ease;
   background-color: #21263b; 
   border: 1px solid white; 
+  max-width: 300px;
 }
 
 .feature:hover {

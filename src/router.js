@@ -18,6 +18,10 @@ const routes = [
     component: MijnGamesLayout,
     meta: { requiresAuth: true },
   },
+  {
+    path: '/all-games',
+    commponent: AllGames,
+  }
 ];
 
 const router = createRouter({
