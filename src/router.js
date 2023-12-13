@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeComponent from './components/HomeComponent.vue';
 import MijnGamesLayout from './views/MijnGames.vue';
-import store from './services/store.js'; // Import the Vuex store
+import AllGames from './views/AllGames.vue'; // Voeg de import toe voor AllGames.vue
+import store from './services/store.js';
 
 const routes = [
   {
@@ -18,10 +19,14 @@ const routes = [
     component: MijnGamesLayout,
     meta: { requiresAuth: true },
   },
+  {
+    path: '/all-games',
+    component: AllGames, 
+  },
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(process.env.BASE_URL),
   routes,
 });
 
@@ -34,7 +39,6 @@ router.beforeEach(async (to, from, next) => {
       });
       const data = await response.json();
 
-      // Dispatch an action to update the store with the authentication status and steamId
       store.dispatch('updateAuthStatus', {
         isAuthenticated: data.isLoggedIn,
         steamId: data.steamId,
