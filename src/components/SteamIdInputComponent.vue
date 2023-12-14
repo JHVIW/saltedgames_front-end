@@ -4,7 +4,7 @@
       <br>
     </div>
     <div v-if="isLoading" class="loading-spinner">
-      <div class="spinner"></div> 
+      <div class="spinner"></div>
       Loading...
     </div>
     <div v-else>
@@ -15,37 +15,38 @@
 
 <script>
 import { getGames } from '@/services/GetGames.js';
-import store from '@/services/store.js'; 
+import store from '@/services/store.js';
 
 export default {
   data() {
     return {
-      steam64Id: store.state.steamId || "", 
-      isLoading: false, 
+      steam64Id: store.state.steamId || "",
+      isLoading: false,
     };
   },
   methods: {
     async getGames() {
-      this.isLoading = true; 
+      this.isLoading = true;
       try {
         const result = await getGames(this.steam64Id);
-        this.$emit('gamesFetched', result);
+        this.$emit('gamesFetched', result); // Emit an event when games are fetched
       } finally {
-        this.isLoading = false; 
+        this.isLoading = false;
       }
     }
   },
   watch: {
     'store.state.steamId'(newSteamId) {
-      this.steam64Id = newSteamId;
-      this.getGames(); 
+      this.steam64Id = newSteamId; // Update steam64Id when store state changes
+      this.getGames(); // Call getGames method when steamId changes
     },
   },
   created() {
-    this.getGames();
+    this.getGames(); // Call getGames method when the component is created
   },
 };
 </script>
+
 
 <style scoped>
 .home {

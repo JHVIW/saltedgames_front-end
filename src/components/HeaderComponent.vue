@@ -6,7 +6,7 @@
           <router-link to="/home" style="text-decoration: none;" class="salted-games-link">SaltedGames</router-link>
         </h1>
       </div>
-      
+
       <!-- Conditional rendering based on isAuthenticated -->
       <div v-if="!isAuthenticated">
         <button @click="loginViaSteam" class="steam-login-btn">
@@ -37,10 +37,85 @@
       <router-link to="/all-games" style="text-decoration: none;" @click="toggleMenu">
         Alle Games
       </router-link>
+      <br>
+
+      <!-- Add the logout button -->
+      <button @click="logout" class="logout-btn">
+        Logout
+      </button>
     </div>
   </div>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      isMenuOpen: false,
+      isAuthenticated: false,
+    };
+  },
+  methods: {
+    toggleMenu() {
+      this.isMenuOpen = !this.isMenuOpen;
+    },
+    closeMenuOnClickOutside(event) {
+      if (this.isMenuOpen) {
+        const menuElement = this.$el.querySelector('.menu');
+        const hamburgerButton = this.$el.querySelector('.hamburger-btn');
+
+        if (!menuElement.contains(event.target) && !hamburgerButton.contains(event.target)) {
+          this.isMenuOpen = false;
+        }
+      }
+    },
+    loginViaSteam() {
+      window.location.href = 'http://localhost:5124/Auth/login';
+    },
+    async checkAuthStatus() {
+      try {
+        const response = await fetch('http://localhost:5124/Auth/status', {
+          method: 'GET',
+          credentials: 'include',
+        });
+        const data = await response.json();
+        this.isAuthenticated = data.isLoggedIn;
+      } catch (error) {
+        console.error('Error checking authentication status', error);
+        this.isAuthenticated = false;
+      }
+    },
+    logout() {
+      fetch('http://localhost:5124/Auth/logout', {
+        method: 'POST',
+        credentials: 'include',
+      })
+      .then(() => {
+        document.cookie = 'auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        this.isAuthenticated = false;
+      })
+      .catch((error) => {
+        console.error('Error logging out', error);
+      });
+    },
+  },
+
+  mounted() {
+    this.checkAuthStatus();
+    document.addEventListener("click", this.closeMenuOnClickOutside);
+  },
+  beforeUnmount() {
+    document.removeEventListener("click", this.closeMenuOnClickOutside);
+  },
+  beforeRouteLeave(to, from, next) {
+    this.isMenuOpen = false;
+    next();
+  },
+  closeMenu() {
+    this.isMenuOpen = false;
+  },
+};
+</script>
 <style scoped>
 .header {
   font-size: 2.5rem;
@@ -131,66 +206,4 @@
   border-radius: 5px; 
 }
 </style>
-
-<script>
-export default {
-  data() {
-    return {
-      isMenuOpen: false,
-      isAuthenticated: false,
-    };
-  },
-  methods: {
-    toggleMenu() {
-      this.isMenuOpen = !this.isMenuOpen;
-    },
-    closeMenuOnClickOutside(event) {
-      // Controleer of het menu open is
-      if (this.isMenuOpen) {
-        // Verkrijg een referentie naar het menu en de hamburger button
-        const menuElement = this.$el.querySelector('.menu');
-        const hamburgerButton = this.$el.querySelector('.hamburger-btn');
-
-        // Als de klik buiten het menu is en niet op de hamburger button, sluit het menu
-        if (!menuElement.contains(event.target) && !hamburgerButton.contains(event.target)) {
-          this.isMenuOpen = false;
-        }
-      }
-    },
-    loginViaSteam() {
-      window.location.href = 'http://localhost:5124/Auth/login'; // Dit moet de URL zijn van je .NET Core API login endpoint
-    },
-    async checkAuthStatus() {
-      try {
-        const response = await fetch('http://localhost:5124/Auth/status', {
-          method: 'GET',
-          credentials: 'include', // Include credentials (cookies) in the request
-        });
-        const data = await response.json();
-        this.isAuthenticated = data.isLoggedIn;
-      } catch (error) {
-        console.error('Error checking authentication status', error);
-        this.isAuthenticated = false;
-      }
-    },
-  },
-
-
-
-  mounted() {
-    this.checkAuthStatus(); // Check authentication status when the component is mounted
-    document.addEventListener("click", this.closeMenuOnClickOutside);
-  },
-  beforeUnmount() {
-    document.removeEventListener("click", this.closeMenuOnClickOutside);
-  },
-  beforeRouteLeave(to, from, next) {
-    this.isMenuOpen = false;
-    next();
-  },
-  closeMenu() {
-    this.isMenuOpen = false;
-  },
-};
-</script>
 

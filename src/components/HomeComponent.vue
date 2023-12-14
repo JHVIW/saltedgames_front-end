@@ -40,7 +40,7 @@ body, html {
 }
 
 .home {
-  height: 100vh; /* Ensure it fills the full viewport height */
+  height: 100vh; 
   text-align: center;
   padding: 2rem;
   background-color: #191d32;
