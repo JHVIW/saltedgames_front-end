@@ -99,10 +99,29 @@ async function getAllGames(page, pageSize) {
   }
 }
 
+async function searchGamesByName(query) {
+  try {
+    const response = await fetch(
+      `http://localhost:5176/api/Game/SearchGames?query=${query}`
+    );
+
+    if (response.ok) {
+      const games = await response.json();
+      return games;
+    } else {
+      return [];
+    }
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
 export {
   storeGames,
   getGames,
   convertMinutesToHours,
   sortGamesByPlaytime,
-  getAllGames 
+  getAllGames,
+  searchGamesByName,
 };

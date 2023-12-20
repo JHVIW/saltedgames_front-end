@@ -18,60 +18,28 @@
 </template>
 
 <script>
-import { getAllGames } from "@/services/GetGames.js"
-
 export default {
-  data() {
-    return {
-      games: [],
-      currentPage: 1,
-      pageSize: 10,
-      totalGames: 0,
-    };
-  },
-  computed: {
-    totalPages() {
-      return Math.ceil(this.totalGames / this.pageSize);
-    },
+  props: {
+    games: Array,
+    currentPage: Number,
+    totalPages: Number,
   },
   methods: {
-    async fetchGames() {
-      try {
-        const response = await getAllGames(this.currentPage, this.pageSize);
-        if (response && response.games && response.total) {
-          this.games = response.games;
-          this.totalGames = response.total;
-        } else {
-          console.error('Invalid response data:', response);
-        }
-      } catch (error) {
-        console.error("Error fetching games:", error);
-      }
-    },
-
-
     prevPage() {
       if (this.currentPage > 1) {
-        this.currentPage--;
-        this.fetchGames();
+        this.$emit('prevPage');
       }
     },
     nextPage() {
       if (this.currentPage < this.totalPages) {
-        this.currentPage++;
-        this.fetchGames();
+        this.$emit('nextPage');
       }
     },
-  },
-  mounted() {
-    this.fetchGames();
   },
 };
 </script>
 
 <style scoped>
-/* Add your component's styles here */
-
 /* Container style */
 div {
   text-align: center;
