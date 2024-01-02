@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeComponent from './components/HomeComponent.vue';
 import MijnGamesLayout from './views/MijnGames.vue';
-import AllGames from './views/AllGames.vue'; // Voeg de import toe voor AllGames.vue
+import AllGames from './views/AllGames.vue';
+import Recommendations from './views/Recommendations.vue';
 import store from './services/store.js';
 
 const routes = [
@@ -22,6 +23,11 @@ const routes = [
   {
     path: '/all-games',
     component: AllGames, 
+  },
+  {
+    path: '/recommendations',
+    component: Recommendations, 
+    meta: { requiresAuth: true },
   },
 ];
 
